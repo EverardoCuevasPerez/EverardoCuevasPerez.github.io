@@ -1,65 +1,83 @@
-$(document).ready(function() {
 
+function main() {
 
-    let $btns = $('.project-area .button-group button');
+(function () {
+   'use strict';
 
+   /* ==============================================
+  	Testimonial Slider
+  	=============================================== */ 
 
-    $btns.click(function(e) { 
+  	$('a.page-scroll').click(function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+          var target = $(this.hash);
+          target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+          if (target.length) {
+            $('html,body').animate({
+              scrollTop: target.offset().top - 40
+            }, 900);
+            return false;
+          }
+        }
+      });
 
-        $('.project-area .button-group button').removeClass('active');
-        e.target.classList.add('active');
- 
-        let selector = $(e.target).attr('data-filter');
-        $('.project-area .grid').isotope({
-            filter: selector
-        });
-
-        return false;
-    })
-
-    $('.project-area .button-group #btn1').trigger('click');
-
-    $('.project-area .grid .test-popup-link').magnificPopup({
-        type: 'image',
-        gallery: {
-            enabled: true
+    /*====================================
+    Show Menu on Book
+    ======================================*/
+    $(window).bind('scroll', function() {
+        var navHeight = $(window).height() - 500;
+        if ($(window).scrollTop() > navHeight) {
+            $('.navbar-default').addClass('on');
+        } else {
+            $('.navbar-default').removeClass('on');
         }
     });
 
-
-    // Owl-carousel
-
-    $('.site-main .about-area .owl-carousel').owlCarousel({
-        loop: true,
-        autoplay: true,
-        dots: true,
-        responsive: {
-            0: {
-                items: 1
-            },
-            560: {
-                items: 2
-            }
-        }
+    $('body').scrollspy({ 
+        target: '.navbar-default',
+        offset: 80
     })
 
-    // sticky navigation menu
 
-    let nav_offset_top = $('.header_area').height() + 50;
-
-    function navbarFixed() {
-        if ($('.header_area').length) {
-            $(window).scroll(function() {
-    let scroll = $(window).scrollTop();
-    if (scroll >= nav_offset_top) {
-                    $('.header_area .main-menu').addClass('navbar_fixed');
-     } else {
-                    $('.header_area .main-menu').removeClass('navbar_fixed');
+  	/*====================================
+    Portfolio Isotope Filter
+    ======================================*/
+    $(window).load(function() {
+        var $container = $('.portfolio-items');
+        $container.isotope({
+            filter: '*',
+            animationOptions: {
+                duration: 750,
+                easing: 'linear',
+                queue: false
+            }
+        });
+        $('.cat a').click(function() {
+            $('.cat .active').removeClass('active');
+            $(this).addClass('active');
+            var selector = $(this).attr('data-filter');
+            $container.isotope({
+                filter: selector,
+                animationOptions: {
+                    duration: 750,
+                    easing: 'linear',
+                    queue: false
                 }
-            })
-        }
-    }
+            });
+            return false;
+        });
 
-    navbarFixed();
+    });
 
-});
+  	/*====================================
+    Pretty Photo
+    ======================================*/
+	$("a[rel^='prettyPhoto']").prettyPhoto({
+		social_tools: false
+	});	
+
+}());
+
+
+}
+main();
